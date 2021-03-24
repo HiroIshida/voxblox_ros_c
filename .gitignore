@@ -2,3 +2,4 @@ action.sh
 /build
 *.pickle
 *.binmsg
+/_skbuild
