@@ -18,8 +18,18 @@ static PyObject* py_create_esdf_map(PyObject *self, PyObject *args){
     return PyLong_FromVoidPtr(mapm);
 }
 
+static PyObject* py_update_esdf_map(PyObject *self, PyObject *args){
+    PyObject* mapm_;
+    uint8_t* msg_serialized;
+    PyArg_ParseTuple(args, "Ob", &mapm_, &msg_serialized);
+    void* mapm = PyLong_AsVoidPtr(mapm_);
+    C_update_esdf_map(mapm, msg_serialized);
+    Py_RETURN_NONE;
+}
+
 static PyMethodDef methods[] = {
     {"create_esdf_map", py_create_esdf_map, METH_VARARGS, "create esdf map"},
+    {"update_esdf_map", py_update_esdf_map, METH_VARARGS, "update esdf map"},
     {NULL, NULL, 0, NULL}
 };
 
