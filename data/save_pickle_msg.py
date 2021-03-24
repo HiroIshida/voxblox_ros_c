@@ -1,12 +1,20 @@
+import io
 import pickle
 import rospy
 from voxblox_msgs.msg import Layer, Block
 
-data = {"data_sequence": []}
+data = {"data_sequence": [], "counter": 0}
 
 def callback(msg):
-    print("recording")
-    data["data_sequence"].append(msg)
+    print("rec")
+    filename = "layer{0}.binmsg".format(data["counter"])
+
+    s = io.BytesIO()
+    msg.serialize(s)
+    bindata = s.getvalue()
+    with open(filename, "w") as f:
+        f.write(bindata)
+    data["counter"] += 1
 
 topic_name = "/voxblox_node/esdf_map_out"
 rospy.init_node('listener', anonymous=True)
