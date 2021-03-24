@@ -1,42 +1,38 @@
 #include <Python.h>
 #include "c_api.h"
+#include "stdio.h"
 
 #if PY_MAJOR_VERSION >= 3
 // https://stackoverflow.com/questions/32295927/failed-c-extension-compilation-for-python
 #define PY3K
 #endif
 
-static PyObject* PY_create_esdf_map(PyObject *self, PyObject *args){
+static PyObject* py_create_esdf_map(PyObject *self, PyObject *args){
 
-    double esdf_voxel_size, esdf_voxel_per_side;
-    PyArg_ParseTuple(args, "di", &esdf_voxel_size, esdf_voxel_per_side);
+    double esdf_voxel_size = 0.0;
+    int esdf_voxel_per_side = 0;
+    // https://python.readthedocs.io/en/v2.7.2/c-api/arg.html#arg-parsing
+    PyArg_ParseTuple(args, "di", &esdf_voxel_size, &esdf_voxel_per_side);
 
     void* mapm = C_create_esdf_map(esdf_voxel_size, esdf_voxel_per_side);
-    PyObject* py_mapm = (PyObject*)mapm;
-    return py_mapm;
+    return PyLong_FromVoidPtr(mapm);
 }
 
 static PyMethodDef methods[] = {
-    {"_voxblox_ros_python", PY_create_esdf_map, METH_VARARGS, "Python interface for fputs C library function"},
+    {"create_esdf_map", py_create_esdf_map, METH_VARARGS, "create esdf map"},
     {NULL, NULL, 0, NULL}
 };
 
+#define INITERROR return
 #ifdef PY3K
-static struct PyModuleDef voxblox_ros_python_module = {
-    PyModuleDef_HEAD_INIT,
-    "_voxblox_ros_python",
-    "Python interface for voxblox_ros",
-    -1,
-    methods
-};
+// TODO
 #else
-PyMODINIT_FUNC PyInit_voxblox_ros_python(){
-    Py_InitModule3("_voxblox_ros_python", methods, "doc TODO");
+PyMODINIT_FUNC
+init_voxblox_ros_python(void){
+    PyObject* m;
+    m = Py_InitModule3("_voxblox_ros_python", methods, "doc TODO");
+    if(m==NULL){
+        INITERROR;
+    }
 }
 #endif
-/*
-
-PyMODINIT_FUNC PyInit_voxblox_ros_python(void) {
-    return PyModule_Create(&voxblox_ros_python_module);
-}
-*/

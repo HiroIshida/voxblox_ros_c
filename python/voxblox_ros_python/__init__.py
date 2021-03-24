@@ -1,1 +1,0 @@
-import _voxblox_ros_python as voxblox_ros_python
