@@ -21,3 +21,6 @@ install(TARGETS _voxblox_ros_python LIBRARY DESTINATION .) # for pip install
 
 add_executable(example_basic example/basic.c)
 target_link_libraries(example_basic voxblox_ros_c)
+
+add_executable(debug example/debug.cpp)
+target_link_libraries(debug ${catkin_LIBRARIES} voxblox_ros_c)
