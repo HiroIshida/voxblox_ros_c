@@ -9,7 +9,7 @@ find_package(catkin REQUIRED
         voxblox_ros
         voxblox_msgs
     )
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(src/ ${catkin_INCLUDE_DIRS})
 
 add_library(voxblox_ros_c SHARED src/c_api.cpp src/map_manager.cpp)
 target_link_libraries(voxblox_ros_c ${catkin_LIBRARIES})
