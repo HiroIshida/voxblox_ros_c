@@ -4,7 +4,7 @@
 
 int main() {
   // these parameter should not be hard coded!!!
-  std::ifstream in("../data/layer12.binmsg");
+  std::ifstream in("../data/layer0.binmsg");
   std::string contents((std::istreambuf_iterator<char>(in)), 
   std::istreambuf_iterator<char>());
 

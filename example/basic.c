@@ -2,7 +2,7 @@
 #include "c_api.h"
 
 int main(){
-    unsigned char buffer[18];
+    unsigned char buffer[1000];
     FILE* ptr;
     ptr = fopen("../data/layer0.binmsg", "rb");
     fread(buffer,sizeof(buffer),1,ptr);
