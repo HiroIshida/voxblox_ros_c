@@ -20,8 +20,8 @@ static PyObject* py_create_esdf_map(PyObject *self, PyObject *args){
 
 static PyObject* py_update_esdf_map(PyObject *self, PyObject *args){
     PyObject* mapm_;
-    uint8_t* msg_serialized;
-    PyArg_ParseTuple(args, "Ob", &mapm_, &msg_serialized);
+    unsigned char* msg_serialized;
+    PyArg_ParseTuple(args, "Os", &mapm_, &msg_serialized);
     void* mapm = PyLong_AsVoidPtr(mapm_);
     C_update_esdf_map(mapm, msg_serialized);
     Py_RETURN_NONE;

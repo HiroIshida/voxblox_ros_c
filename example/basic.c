@@ -6,6 +6,6 @@ int main(){
     FILE* ptr;
     ptr = fopen("../data/layer0.binmsg", "rb");
     fread(buffer,sizeof(buffer),1,ptr);
-    void* map = C_create_esdf_map(0.02, 10);
+    void* map = C_create_esdf_map(0.2, 16);
     C_update_esdf_map(map, buffer);
 }
