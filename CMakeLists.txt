@@ -24,3 +24,6 @@ target_link_libraries(example_basic voxblox_ros_c)
 
 add_executable(debug example/debug.cpp)
 target_link_libraries(debug ${catkin_LIBRARIES} voxblox_ros_c)
+
+add_executable(successful example/successful.cpp)
+target_link_libraries(successful ${catkin_LIBRARIES} voxblox_ros_c)
