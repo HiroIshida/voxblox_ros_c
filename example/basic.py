@@ -1,3 +1,4 @@
+import time
 import _voxblox_ros_python as vrp
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,20 +14,33 @@ def update_map(msg_idx):
 
 if __name__=='__main__':
     try:
-        for i in range(20):
+        for i in range(40):
             update_map(i)
     except TypeError:
         pass
 
-    N = 50
-    b_min = np.array([0.0, -3.0])
+    print("finish updating")
+
+    N = 5
+    b_min = np.array([-1.0, -3.0])
     b_max = np.array([4.0, 4.0])
     Ls = [np.linspace(l, h, N) for l, h in zip(b_min, b_max)]
     mgrids = np.meshgrid(*Ls)
     pts_2d = np.array(zip(*[mg.flatten() for mg in mgrids]))
-    ones = np.ones(N*N)
+    ones = np.ones(N*N) * 1.5
     pts_3d = np.hstack((pts_2d, ones[:, None]))
-    dists = np.array([vrp.get_dist(ptr, pt.tolist()) for pt in pts_3d])
+
+    ts = time.time()
+    a = pts_3d.tolist()
+    for i in range(100):
+        dists = np.array(vrp.get_batch_dist(ptr, a))
+    print("elapsed batch : {0}".format(time.time() - ts))
+
+    ts = time.time()
+    for i in range(100):
+        dists = np.array([vrp.get_dist(ptr, pt.tolist()) for pt in pts_3d])
+    print("elapsed iter : {0}".format(time.time() - ts))
+
     F = dists.reshape(N, N)
     plt.contourf(mgrids[0], mgrids[1], F)
     plt.colorbar()

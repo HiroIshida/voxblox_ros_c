@@ -41,10 +41,32 @@ static PyObject* py_get_dist(PyObject *self, PyObject *args){
     return PyFloat_FromDouble(dist);
 }
 
+static PyObject* py_get_batch_dist(PyObject *self, PyObject *args){
+    PyObject* mapm_;
+    PyObject* py_point_list;
+    PyArg_ParseTuple(args, "OO", &mapm_, &py_point_list);
+    void* mapm = PyLong_AsVoidPtr(mapm_);
+
+    int n_point = PySequence_Size(py_point_list);
+    PyObject* py_dist_list = PyList_New(n_point);
+    double point[3];
+    double dist;
+    for(int i=0; i<n_point; i++){
+      PyObject* py_point = PyList_GetItem(py_point_list, i);
+      for(int j=0; j<3; j++){
+          point[j] = PyFloat_AsDouble(PyList_GetItem(py_point, j));
+      }
+      C_get_dist(mapm, point, &dist);
+      PyList_SetItem(py_dist_list, i, PyFloat_FromDouble(dist));
+    }
+    return py_dist_list;
+}
+
 static PyMethodDef methods[] = {
     {"create_esdf_map", py_create_esdf_map, METH_VARARGS, "create esdf map"},
     {"update_esdf_map", py_update_esdf_map, METH_VARARGS, "update esdf map"},
     {"get_dist", py_get_dist, METH_VARARGS, "get signed distance"},
+    {"get_batch_dist", py_get_batch_dist, METH_VARARGS, "get signed distances"},
     {NULL, NULL, 0, NULL}
 };
 
