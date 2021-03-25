@@ -17,4 +17,6 @@ class EsdfMapManager
     EsdfMapManager(double esdf_voxel_size, int esdf_voxel_per_side); 
     void update(unsigned char* serialized_layer_msg_);
     void update(const voxblox_msgs::Layer& layer_msg);
+    void get_dist(double* pt, double* dist);
+    void get_dist_and_grad(double* pt, double* dist, double* grad);
 };

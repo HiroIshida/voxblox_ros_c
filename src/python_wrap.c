@@ -27,9 +27,24 @@ static PyObject* py_update_esdf_map(PyObject *self, PyObject *args){
     Py_RETURN_NONE;
 }
 
+static PyObject* py_get_dist(PyObject *self, PyObject *args){
+    PyObject* mapm_;
+    PyObject* py_point;
+    PyArg_ParseTuple(args, "OO", &mapm_, &py_point);
+    void* mapm = PyLong_AsVoidPtr(mapm_);
+    double point[3];
+    for(int i=0; i<3; i++){
+        point[i] = PyFloat_AsDouble(PyList_GetItem(py_point, i));
+    }
+    double dist;
+    C_get_dist(mapm, point, &dist);
+    return PyFloat_FromDouble(dist);
+}
+
 static PyMethodDef methods[] = {
     {"create_esdf_map", py_create_esdf_map, METH_VARARGS, "create esdf map"},
     {"update_esdf_map", py_update_esdf_map, METH_VARARGS, "update esdf map"},
+    {"get_dist", py_get_dist, METH_VARARGS, "get signed distance"},
     {NULL, NULL, 0, NULL}
 };
 

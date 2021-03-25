@@ -10,3 +10,8 @@ void C_update_esdf_map(void* mapm_, unsigned char* serialized_layer_msg_){
   auto mapm = static_cast<EsdfMapManager*>(mapm_);
   mapm->update(serialized_layer_msg_);
 }
+
+void C_get_dist(void* mapm_, double* pt, double* dist){
+  auto mapm = static_cast<EsdfMapManager*>(mapm_);
+  mapm->get_dist(pt, dist);
+}
