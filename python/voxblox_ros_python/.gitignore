@@ -1,0 +1,6 @@
+*.sh
+*.bash
+*.zsh
+*.pyc
+_setup_util.py
+.rosinstall
