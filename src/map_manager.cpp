@@ -17,7 +17,6 @@ void EsdfMapManager::update(const voxblox_msgs::Layer& layer_msg){
 }
 
 void EsdfMapManager::get_dist(double* pt, double* dist){
-  Eigen::Vector3d pt_eigen;
-  pt_eigen << pt[0], pt[1], pt[2];
+  Eigen::Vector3d pt_eigen(pt);
   bool success = map_.getDistanceAtPosition(pt_eigen, dist);
 }

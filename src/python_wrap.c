@@ -62,11 +62,25 @@ static PyObject* py_get_batch_dist(PyObject *self, PyObject *args){
     return py_dist_list;
 }
 
+static PyObject* py_debug_dist4000(PyObject *self, PyObject *args){
+    PyObject* mapm_;
+    PyArg_ParseTuple(args, "O", &mapm_);
+    void* mapm = PyLong_AsVoidPtr(mapm_);
+
+    double point[3] = {2.0, 2.0, 1.0};
+    double dist;
+    for(int i=0; i<400; i++){
+        C_get_dist(mapm, point, &dist);
+    }
+    Py_RETURN_NONE;
+}
+
 static PyMethodDef methods[] = {
     {"create_esdf_map", py_create_esdf_map, METH_VARARGS, "create esdf map"},
     {"update_esdf_map", py_update_esdf_map, METH_VARARGS, "update esdf map"},
     {"get_dist", py_get_dist, METH_VARARGS, "get signed distance"},
     {"get_batch_dist", py_get_batch_dist, METH_VARARGS, "get signed distances"},
+    {"debug_dist4000", py_debug_dist4000, METH_VARARGS, "debugging only"},
     {NULL, NULL, 0, NULL}
 };
 
