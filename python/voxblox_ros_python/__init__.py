@@ -9,7 +9,10 @@ class EsdfMapClientInterface(object):
         s = io.BytesIO()
         layer_msg.serialize(s)
         bindata = s.getvalue()
-        _voxblox_ros_python.update_esdf_map(self._ptr, bindata)
+        self._update(bindata)
+
+    def _update(self, msg_bindata):
+        _voxblox_ros_python.update_esdf_map(self._ptr, msg_bindata)
 
     def get_distance(self, pts):
         dists = _voxblox_ros_python.get_batch_dist(self._ptr, pts)
