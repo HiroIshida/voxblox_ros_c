@@ -21,7 +21,7 @@ if __name__=='__main__':
 
     print("finish updating")
 
-    N = 5
+    N = 20
     b_min = np.array([-1.0, -3.0])
     b_max = np.array([4.0, 4.0])
     Ls = [np.linspace(l, h, N) for l, h in zip(b_min, b_max)]
@@ -39,6 +39,11 @@ if __name__=='__main__':
     ts = time.time()
     for i in range(100):
         dists = np.array([vrp.get_dist(ptr, pt.tolist()) for pt in pts_3d])
+    print("elapsed iter : {0}".format(time.time() - ts))
+
+    ts = time.time()
+    for i in range(100):
+        vrp.debug_dist4000(ptr);
     print("elapsed iter : {0}".format(time.time() - ts))
 
     F = dists.reshape(N, N)
