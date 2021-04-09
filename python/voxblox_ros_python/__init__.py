@@ -7,7 +7,7 @@ class EsdfMapClientInterface(object):
 
     def update(self, layer_msg):
         s = io.BytesIO()
-        msg.serialize(s)
+        layer_msg.serialize(s)
         bindata = s.getvalue()
         _voxblox_ros_python.update_esdf_map(self._ptr, bindata)
 
