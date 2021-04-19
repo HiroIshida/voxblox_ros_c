@@ -19,3 +19,6 @@ add_library(_voxblox_ros_python MODULE src/python_wrap.c)
 SET_TARGET_PROPERTIES(_voxblox_ros_python PROPERTIES PREFIX "")
 target_link_libraries(_voxblox_ros_python voxblox_ros_c)
 install(TARGETS _voxblox_ros_python DESTINATION .) # for pip install 
+
+add_executable(simple_test test/basic.c)
+target_link_libraries(simple_test voxblox_ros_c)
