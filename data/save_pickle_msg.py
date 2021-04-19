@@ -6,18 +6,14 @@ from voxblox_msgs.msg import Layer, Block
 data = {"data_sequence": [], "counter": 0}
 
 def callback(msg):
-    print("rec {0}".format(data["counter"]))
-    filename_serialized = "layer{0}.sermsg".format(data["counter"])
+    print("rec")
+    filename = "layer{0}.binmsg".format(data["counter"])
+
     s = io.BytesIO()
     msg.serialize(s)
     bindata = s.getvalue()
-    with open(filename_serialized, "w") as f:
+    with open(filename, "w") as f:
         f.write(bindata)
-
-    filename_deserialized = "layer{0}.pickle".format(data["counter"])
-    with open(filename_deserialized, "wb") as f:
-        pickle.dump(msg, f)
-
     data["counter"] += 1
 
 topic_name = "/voxblox_node/esdf_map_out"
@@ -25,3 +21,6 @@ rospy.init_node('listener', anonymous=True)
 rospy.Subscriber(topic_name, Layer, callback)
 rospy.spin()
 
+filename = "layer_msg_seq.pickle"
+with open(filename, "wb") as f:
+    pickle.dump(data["data_sequence"], f)
