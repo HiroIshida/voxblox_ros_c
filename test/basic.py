@@ -1,23 +1,24 @@
+import pickle
 import time
-import _voxblox_ros_python as vrp
+from voxblox_ros_python import EsdfMapClientInterface
 import matplotlib.pyplot as plt
 import numpy as np
 
 # non-object-oriented style 
-ptr = vrp.create_esdf_map(0.2, 16)
+esdf_map = EsdfMapClientInterface(0.2, 16)
 
 def update_map(msg_idx):
-    filename = "../data/layer{0}.binmsg".format(msg_idx)
-    with open(filename, "rb") as f:
-        msg_serialized = f.read()
-    vrp.update_esdf_map(ptr, msg_serialized)
+    filename = "../data/layer{0}.desermsg".format(msg_idx)
+    with open(filename, "r") as f:
+        string_msg_serizlied = f.read()
+        print(string_msg_serizlied)
+        msg_serialized = pickle.loads(string_msg_serizlied)
+        esdf_map.update(msg_serialized)
 
 if __name__=='__main__':
-    try:
-        for i in range(40):
-            update_map(i)
-    except TypeError:
-        pass
+    for i in range(40):
+        print(i)
+        update_map(i)
 
     print("finish updating")
 
@@ -31,19 +32,8 @@ if __name__=='__main__':
     pts_3d = np.hstack((pts_2d, ones[:, None]))
 
     ts = time.time()
-    a = pts_3d.tolist()
     for i in range(100):
-        dists = np.array(vrp.get_batch_dist(ptr, a))
-    print("elapsed batch : {0}".format(time.time() - ts))
-
-    ts = time.time()
-    for i in range(100):
-        dists = np.array([vrp.get_dist(ptr, pt.tolist()) for pt in pts_3d])
-    print("elapsed iter : {0}".format(time.time() - ts))
-
-    ts = time.time()
-    for i in range(100):
-        vrp.debug_dist4000(ptr);
+        dists = np.array(esdf_map.get_distance(pts_3d))
     print("elapsed iter : {0}".format(time.time() - ts))
 
     F = dists.reshape(N, N)
