@@ -34,10 +34,22 @@ int main() {
   C_get_dist(map, pt, &dist);
   std::cout << dist << std::endl; 
 
-  double grad[3];
-  C_get_dist_and_grad(map, pt, &dist, grad);
-  std::cout << dist << std::endl; 
-  std::cout << grad[0] << ", " << grad[1] << ", " << grad[2] << std::endl; 
+  int N = 100000;
+  {
+    clock_t start = clock();
+    double grad[3];
+    for(int i=0; i<N; i++){
+      C_get_dist_and_grad(map, pt, &dist, grad);
+    }
+    clock_t end = clock();
+    std::cout << end - start << std::endl; 
+  }
+  {
+    clock_t start = clock();
+    C_debug_get_dist_and_grad(map, pt, 100000);
+    clock_t end = clock();
+    std::cout << end - start << std::endl; 
+  }
 }
 
 

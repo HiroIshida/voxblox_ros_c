@@ -43,3 +43,14 @@ void C_get_dist_and_grad(void* map_, double* pt, double* dist, double* grad){
     grad[i] = grad_eigen(i);
   }
 }
+
+// DEBUGGING PURPOSE 
+void C_debug_get_dist_and_grad(void* map_, double* pt, int n_itr){
+  auto map = static_cast<voxblox::EsdfMap*>(map_);
+  Eigen::Vector3d pt_eigen(pt);
+  Eigen::Vector3d grad_eigen;
+  double dist;
+  for(int i=0; i<n_itr; i++){
+    map->getDistanceAndGradientAtPosition(pt_eigen, &dist, &grad_eigen);
+  }
+}
