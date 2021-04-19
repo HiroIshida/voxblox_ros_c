@@ -33,3 +33,13 @@ void C_get_dist(void* map_, double* pt, double* dist){
   Eigen::Vector3d pt_eigen(pt);
   bool success = map->getDistanceAtPosition(pt_eigen, dist);
 }
+
+void C_get_dist_and_grad(void* map_, double* pt, double* dist, double* grad){
+  auto map = static_cast<voxblox::EsdfMap*>(map_);
+  Eigen::Vector3d pt_eigen(pt);
+  Eigen::Vector3d grad_eigen;
+  bool success = map->getDistanceAndGradientAtPosition(pt_eigen, dist, &grad_eigen);
+  for(int i=0; i<3; i++){
+    grad[i] = grad_eigen(i);
+  }
+}

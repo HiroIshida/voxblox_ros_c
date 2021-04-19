@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <string>
 #include "c_api.h"
 
 void update_esdf_map(void* map, int idx_layer){
@@ -32,6 +33,11 @@ int main() {
   double dist = -1.0;
   C_get_dist(map, pt, &dist);
   std::cout << dist << std::endl; 
+
+  double grad[3];
+  C_get_dist_and_grad(map, pt, &dist, grad);
+  std::cout << dist << std::endl; 
+  std::cout << grad[0] << ", " << grad[1] << ", " << grad[2] << std::endl; 
 }
 
 
