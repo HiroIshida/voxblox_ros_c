@@ -8,17 +8,17 @@ import numpy as np
 esdf_map = EsdfMapClientInterface(0.2, 16)
 
 def update_map(msg_idx):
-    filename = "../data/layer{0}.desermsg".format(msg_idx)
+    filename = "../data/layer{0}.binmsg".format(msg_idx)
     with open(filename, "r") as f:
-        string_msg_serizlied = f.read()
-        print(string_msg_serizlied)
-        msg_serialized = pickle.loads(string_msg_serizlied)
-        esdf_map.update(msg_serialized)
+        string = f.read()
+        esdf_map._update(string)
 
 if __name__=='__main__':
-    for i in range(40):
-        print(i)
-        update_map(i)
+    try:
+        for i in range(39):
+                update_map(i)
+    except TypeError:
+        pass
 
     print("finish updating")
 
@@ -33,10 +33,14 @@ if __name__=='__main__':
 
     ts = time.time()
     for i in range(100):
-        dists = np.array(esdf_map.get_distance(pts_3d))
+        dists = esdf_map.get_distance(pts_3d)
     print("elapsed iter : {0}".format(time.time() - ts))
+
+    dists, grads = esdf_map.get_distance(pts_3d, with_grad=True)
+    print(grads)
 
     F = dists.reshape(N, N)
     plt.contourf(mgrids[0], mgrids[1], F)
     plt.colorbar()
     plt.show()
+

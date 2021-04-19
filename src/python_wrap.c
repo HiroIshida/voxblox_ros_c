@@ -62,6 +62,35 @@ static PyObject* py_get_batch_dist(PyObject *self, PyObject *args){
     return py_dist_list;
 }
 
+static PyObject* py_get_batch_dist_and_grad(PyObject *self, PyObject *args){
+    PyObject* mapm_;
+    PyObject* py_point_list;
+    PyArg_ParseTuple(args, "OO", &mapm_, &py_point_list);
+    void* mapm = PyLong_AsVoidPtr(mapm_);
+
+    int n_point = PySequence_Size(py_point_list);
+    PyObject* py_dist_list = PyList_New(n_point);
+    PyObject* py_grad_list = PyList_New(n_point * 3);
+    double point[3];
+    double dist;
+    double grad[3];
+    for(int i=0; i<n_point; i++){
+      PyObject* py_point = PyList_GetItem(py_point_list, i);
+      for(int j=0; j<3; j++){
+          point[j] = PyFloat_AsDouble(PyList_GetItem(py_point, j));
+      }
+      C_get_dist_and_grad(mapm, point, &dist, grad);
+      PyList_SetItem(py_dist_list, i, PyFloat_FromDouble(dist));
+      for(int j=0; j<3; j++){
+          PyList_SetItem(py_grad_list, 3*i+j, PyFloat_FromDouble(grad[j]));
+      }
+    }
+    PyObject* ret = PyTuple_New(2);
+    PyTuple_SetItem(ret, 0, py_dist_list);
+    PyTuple_SetItem(ret, 1, py_grad_list);
+    return ret;
+}
+
 static PyObject* py_debug_dist4000(PyObject *self, PyObject *args){
     PyObject* mapm_;
     PyArg_ParseTuple(args, "O", &mapm_);
@@ -80,6 +109,7 @@ static PyMethodDef methods[] = {
     {"update_esdf_map", py_update_esdf_map, METH_VARARGS, "update esdf map"},
     {"get_dist", py_get_dist, METH_VARARGS, "get signed distance"},
     {"get_batch_dist", py_get_batch_dist, METH_VARARGS, "get signed distances"},
+    {"get_batch_dist_and_grad", py_get_batch_dist_and_grad, METH_VARARGS, "get signed distances"},
     {"debug_dist4000", py_debug_dist4000, METH_VARARGS, "debugging only"},
     {NULL, NULL, 0, NULL}
 };
