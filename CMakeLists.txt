@@ -12,7 +12,7 @@ find_package(catkin REQUIRED
     )
 include_directories(src/ ${catkin_INCLUDE_DIRS})
 
-add_library(voxblox_ros_c STATIC src/c_api.cpp src/map_manager.cpp)
+add_library(voxblox_ros_c STATIC src/c_api.cpp)
 target_link_libraries(voxblox_ros_c ${catkin_LIBRARIES})
 
 add_library(_voxblox_ros_python MODULE src/python_wrap.c)
@@ -28,3 +28,4 @@ target_link_libraries(debug ${catkin_LIBRARIES} voxblox_ros_c)
 
 add_executable(successful test/successful.cpp)
 target_link_libraries(successful ${catkin_LIBRARIES} voxblox_ros_c)
+
