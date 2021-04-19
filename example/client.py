@@ -1,3 +1,5 @@
+import time
+import rospy
 import numpy as np
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D
@@ -22,6 +24,7 @@ if __name__=='__main__':
         F = dists.reshape(N, N)
         plt.contourf(mgrids[0], mgrids[1], F)
         plt.colorbar()
+        plt.show()
 
     def show_cloud():
         N = 20
@@ -47,5 +50,12 @@ if __name__=='__main__':
     topic_name = "/voxblox_node/esdf_map_out"
     rospy.init_node('listener', anonymous=True)
     def callback(msg):
+        import time
+        ts = time.time()
         esdf.update(msg)
+        print("time to update {0}".format(time.time() - ts))
     rospy.Subscriber(topic_name, Layer, callback)
+
+    import time
+    time.sleep(20)
+    show_slice(1.0)
