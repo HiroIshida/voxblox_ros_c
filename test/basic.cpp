@@ -23,7 +23,7 @@ void update_esdf_map(void* map, int idx_layer){
 
 int main() {
   // these parameter should not be hard coded!!!
-  void* map = C_create_esdf_map(0.2, 16);
+  void* map = C_create_esdf_map(0.2, 16, 10000.0);
 
   for(int i=0; i<40; i++){
     update_esdf_map(map, i);
@@ -32,6 +32,10 @@ int main() {
   double pt[3] = {1.0, 0.0, 1.0};
   double dist = -1.0;
   C_get_dist(map, pt, &dist);
+  std::cout << dist << std::endl; 
+
+  double pt1[3] = {1.0, 0.0, 3.0001};
+  C_get_dist(map, pt1, &dist);
   std::cout << dist << std::endl; 
 
   int N = 100000;

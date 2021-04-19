@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # non-object-oriented style 
-esdf_map = EsdfMapClientInterface(0.2, 16)
+esdf_map = EsdfMapClientInterface(0.2, 16, 3.0)
 
 def update_map(msg_idx):
     filename = "../data/layer{0}.binmsg".format(msg_idx)

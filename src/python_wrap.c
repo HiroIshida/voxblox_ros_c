@@ -11,10 +11,11 @@ static PyObject* py_create_esdf_map(PyObject *self, PyObject *args){
 
     double esdf_voxel_size = 0.0;
     int esdf_voxel_per_side = 0;
+    double fill_val;
     // https://python.readthedocs.io/en/v2.7.2/c-api/arg.html#arg-parsing
-    PyArg_ParseTuple(args, "di", &esdf_voxel_size, &esdf_voxel_per_side);
+    PyArg_ParseTuple(args, "did", &esdf_voxel_size, &esdf_voxel_per_side, &fill_val);
 
-    void* mapm = C_create_esdf_map(esdf_voxel_size, esdf_voxel_per_side);
+    void* mapm = C_create_esdf_map(esdf_voxel_size, esdf_voxel_per_side, fill_val);
     return PyLong_FromVoidPtr(mapm);
 }
 

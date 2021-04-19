@@ -3,8 +3,8 @@ import numpy as np
 from . import _voxblox_ros_python 
 
 class EsdfMapClientInterface(object):
-    def __init__(self, voxel_size, voxels_per_side):
-        self._ptr = _voxblox_ros_python.create_esdf_map(voxel_size, voxels_per_side)
+    def __init__(self, voxel_size, voxels_per_side, fill_val=0.0):
+        self._ptr = _voxblox_ros_python.create_esdf_map(voxel_size, voxels_per_side, fill_val)
 
     def update(self, layer_msg):
         s = io.BytesIO()

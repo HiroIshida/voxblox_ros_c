@@ -8,10 +8,13 @@
 
 #include "c_api.h"
 
+double config_fill_val;
+
 using EsdfLayer = voxblox::Layer<voxblox::EsdfVoxel>;
 using EsdfLayerSharedPtr = std::shared_ptr<EsdfLayer>;
 
-void* C_create_esdf_map(double esdf_voxel_size, int esdf_voxel_per_side){
+void* C_create_esdf_map(double esdf_voxel_size, int esdf_voxel_per_side, double fill_val){
+  config_fill_val = fill_val;
   auto esdf_layer_shared_ptr = EsdfLayerSharedPtr(new EsdfLayer(esdf_voxel_size, esdf_voxel_per_side));
   auto map = new voxblox::EsdfMap(esdf_layer_shared_ptr);
   auto map_ = static_cast<void*>(map);
@@ -32,6 +35,9 @@ void C_get_dist(void* map_, double* pt, double* dist){
   auto map = static_cast<voxblox::EsdfMap*>(map_);
   Eigen::Vector3d pt_eigen(pt);
   bool success = map->getDistanceAtPosition(pt_eigen, dist);
+  if(!success){
+    *dist = config_fill_val;
+  }
 }
 
 void C_get_dist_and_grad(void* map_, double* pt, double* dist, double* grad){
@@ -39,8 +45,15 @@ void C_get_dist_and_grad(void* map_, double* pt, double* dist, double* grad){
   Eigen::Vector3d pt_eigen(pt);
   Eigen::Vector3d grad_eigen;
   bool success = map->getDistanceAndGradientAtPosition(pt_eigen, dist, &grad_eigen);
-  for(int i=0; i<3; i++){
-    grad[i] = grad_eigen(i);
+  if(success){
+    for(int i=0; i<3; i++){
+      grad[i] = grad_eigen(i);
+    }
+  }else{
+    *dist = config_fill_val;
+    for(int i=0; i<3; i++){
+      grad[i] = 0.0;
+    }
   }
 }
 
