@@ -27,3 +27,16 @@ class EsdfMapClientInterface(object):
         else:
             dists = _voxblox_ros_python.get_batch_dist(self._ptr, pts)
             return np.array(dists)
+
+    def debug_points(self, b_min, b_max, N=50, threshold=0.0):
+        """
+        Obtains points on which sdf is smaller than the specified threshold 
+        """
+        Ls = [np.linspace(l, h, N) for l, h in zip(b_min, b_max)]
+        mgrids = np.meshgrid(*Ls)
+        pts_3d = np.array(zip(*[mg.flatten() for mg in mgrids]))
+        dists = np.array(self.get_distance(pts_3d))
+        idxes_lower = np.where(dists < threshold)[0]
+        pts_inside = pts_3d[idxes_lower]
+        return pts_inside
+

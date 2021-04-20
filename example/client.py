@@ -8,7 +8,7 @@ from voxblox_msgs.msg import Layer
 from voxblox_ros_python import EsdfMapClientInterface
 
 if __name__=='__main__':
-    esdf = EsdfMapClientInterface(0.2, 16)
+    esdf = EsdfMapClientInterface(0.05, 16)
 
     def show_slice(height):
         N = 20
@@ -27,21 +27,14 @@ if __name__=='__main__':
         plt.show()
 
     def show_cloud():
-        N = 20
         fig = plt.figure()
         ax = fig.add_subplot(111 , projection='3d')
-        x_range = [-1.0, 2.5]
-        y_range = [-2.0, 2.0]
-        z_range = [0., 1.5]
-        b_min, b_max = zip(*[x_range, y_range, z_range])
-        Ls = [np.linspace(l, h, N) for l, h in zip(b_min, b_max)]
-        mgrids = np.meshgrid(*Ls)
-        pts_3d = np.array(zip(*[mg.flatten() for mg in mgrids]))
-        dists = np.array(esdf.get_distance(pts_3d))
+        b_min = [-0.5, -1.0, 0.0]
+        b_max = [1.0, 1.0, 1.5]
+        pts_inside = esdf.debug_points(b_min, b_max)
 
-        idxes_lower = np.where(dists < 0.0)[0]
         myscat = lambda X: ax.scatter(X[:, 0], X[:, 1], X[:, 2])
-        myscat(pts_3d[idxes_lower])
+        myscat(pts_inside)
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
         ax.set_zlabel('Z Label')
@@ -57,5 +50,5 @@ if __name__=='__main__':
     rospy.Subscriber(topic_name, Layer, callback)
 
     import time
-    time.sleep(20)
-    show_slice(1.0)
+    time.sleep(5)
+    show_cloud()
